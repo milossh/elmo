@@ -1,5 +1,6 @@
 from django.conf.urls.defaults import *
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from django.views.generic.simple import redirect_to
 from django.conf import settings
 from django.http import HttpResponse
 import base64
@@ -18,8 +19,10 @@ urlpatterns = patterns('',
                        (r'.*/__history__.html$', lambda r: HttpResponse()),
                        (r'^builds/',
                         include('tinder.urls')),
-                       (r'^pushes/(?P<repo_name>.+)?$',
+                       (r'^source/(?P<repo_name>.+)?$',
                         'pushes.views.pushlog', {}, 'pushlog'),
+                       (r'^pushes/(?P<remainder>.+)?$', 
+                            redirect_to, {'url': '/source/%(remainder)s'}),
                        (r'^dashboard/', include('l10nstats.urls')),
                        (r'^shipping',
                             include('shipping.urls')),
